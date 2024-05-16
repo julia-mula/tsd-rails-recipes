@@ -5,11 +5,17 @@ class RecipesController < ApplicationController
   def index
     @recipes = Recipe.all
   end
+  
+# GET /recipes/1 or /recipes/1.json
+def show
+  @recipe = Recipe.find(params[:id])
+  @ingredient = Ingredient.new(recipe: @recipe)
 
-  # GET /recipes/1 or /recipes/1.json
-  def show
-    @ingredient = Ingredient.new(recipe: @recipe)
+  respond_to do |format|
+    format.html # show.html.erb will be rendered by default
+    format.json { render json: @recipe.as_json(include: { ingredients: { only: [:name] } }) }
   end
+end
 
   # GET /recipes/new
   def new
